@@ -83,6 +83,71 @@ app.get('/expenses/today/:user_id', (req, res) => {
     });
 });
 
+ 
+//Search expenses 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//ADD EXPENSES
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//DELETE EXPENSES
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 app.listen(3000,() =>  {
     console.log("server is run");
