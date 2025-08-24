@@ -130,7 +130,7 @@ app.post
 
 
 //DELETE EXPENSES
-
+app.delete
 
 
 
