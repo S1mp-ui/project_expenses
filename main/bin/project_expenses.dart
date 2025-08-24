@@ -121,9 +121,7 @@ void main() async {
     } 
     
     ////===Choice 3=== Search Expenses ====
-    else if (){
-      
-    }
+    
    
 
     
@@ -145,9 +143,6 @@ void main() async {
 
 
    //===Choice 4=== Add new Expenses ====
-    else if (){
-
-    }
     
 
 

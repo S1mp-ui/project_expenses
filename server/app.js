@@ -106,7 +106,7 @@ app.get('/expenses/today/:user_id', (req, res) => {
 
 
 //ADD EXPENSES
-app.post
+
 
 
 
