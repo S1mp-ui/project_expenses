@@ -61,39 +61,32 @@ void main() async {
     }
 
     //===Choice 1===
-
     if (choice == "1") {
-      // ===== GET ALL EXPENSES =====
-      var res = await http.get(
-        Uri.parse('http://localhost:3000/expenses?user_id=$userId'),
-      );
+    var res = await http.get(
+    Uri.parse('http://localhost:3000/expenses/$userId'),
+  );
 
+  List<dynamic> data = jsonDecode(res.body);
 
-      List<dynamic> data = jsonDecode(res.body);
+  print("=== All Expenses ===");
+  for (int i = 0; i < data.length; i++) {
+    var row = data[i];
+    var d = DateTime.parse(row['date']).toLocal();
 
+    String formattedDate =
+        "${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')} "
+        "${d.hour.toString().padLeft(2, '0')}:${d.minute.toString().padLeft(2, '0')}:${d.second.toString().padLeft(2, '0')}";
 
-      print("===All Expenses===");
-      for (int i = 0; i < data.length; i++) {
-        var row = data[i];
-        var d = DateTime.parse(row['date']).toLocal();
+    print("${i + 1}. ${row["item"]} : ${row["paid"]}฿ : $formattedDate");
+  }
 
-
-        String formattedDate =
-            "${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')} "
-            "${d.hour.toString().padLeft(2, '0')}:${d.minute.toString().padLeft(2, '0')}:${d.second.toString().padLeft(2, '0')}";
-
-
-        print("${i + 1}. ${row["item"]} : ${row["paid"]}฿ : $formattedDate");
-      }
-
-
-      num total = 0;
-      for (var item in data) {
-        total += item['paid'];
-      }
-      print("Total: $total ฿");
-    } 
-    
+  // ===== TOTAL =====
+  num total = 0;
+  for (var item in data) {
+    total += item['paid']; // ✅ paid เป็น number แล้ว
+  }
+  print("Total: $total ฿");
+}
     //===Choice 2===
 
     else if (choice == "2") {

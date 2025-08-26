@@ -63,19 +63,19 @@ app.get('/password/:raw', (req, res) => {
 //----get all expenses-----
 app.get('/expenses/:user_id', (req, res) => {
     const userId = req.params.user_id;
-    const sql ="SELECT * FROM expenses WHERE user_id=?";
+    const sql ="SELECT * FROM expense WHERE user_id=?";
     con.query(sql,[userId],(err,result) => {
-        if(err) return res.status(500).send('Error retrieving expenses');
+        if(err) return res.status(500).send('Error retrieve expenses');
         res.json(result);  
     });
-});;    
+});    
 
 
 //get today expenses
 app.get('/expenses/today/:user_id', (req, res) => {
     const userId = req.params.user_id;
     const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
-    const sql = "SELECT * FROM expenses WHERE user_id=? AND DATE(date) = ?";
+    const sql= "SELECT * FROM expense WHERE user_id=? AND DATE(`date`) = ?";
     
     con.query(sql, [userId, today], (err, result) => {
         if(err) return res.status(500).send('Error retrieving today\'s expenses');
