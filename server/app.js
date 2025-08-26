@@ -106,7 +106,7 @@ app.get
 
 
 //ADD EXPENSES
-
+app.post
 
 
 
