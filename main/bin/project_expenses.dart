@@ -143,9 +143,50 @@ void main() async {
 
 
    //===Choice 4=== Add new Expenses ====
-    else if (){
-      
+    else if (choice == "4") {
+ 
+  stdout.write('Item name: ');
+  final item = stdin.readLineSync()?.trim();
+  if (item == null || item.isEmpty) {
+    print('Invalid item.');
+    continue;
+  }
+
+  stdout.write('Paid (฿): ');
+  final paidStr = stdin.readLineSync()?.trim();
+  final paid = num.tryParse(paidStr ?? '');
+  if (paid == null) {
+    print('Invalid number.');
+    continue;
+  }
+
+
+
+  try {
+    final res = await http.post(
+      Uri.parse('http://localhost:3000/expenses'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'user_id': userId,
+        'item': item,
+        'paid': paid,
+     
+      }),
+    );
+
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      print('✅ Added expense successfully.');
+    } else {
+      print('❌ Add failed: ${res.statusCode}');
+   
+      print(utf8.decode(res.bodyBytes));
     }
+  } catch (e) {
+    print('Error: $e');
+  }
+}
+      
+    
     
 
 
