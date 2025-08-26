@@ -2,8 +2,10 @@ import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'dart:convert';
 
+
 void main() async {
   print("===Login===");
+
 
   stdout.write("Username: ");
   String? username = stdin.readLineSync()?.trim();
@@ -12,12 +14,14 @@ void main() async {
     return;
   }
 
+
   stdout.write("Password: ");
   String? password = stdin.readLineSync()?.trim();
   if (password == null || password.isEmpty) {
     print("please put your password");
     return;
   }
+
 
   // ===== LOGIN =====
   var loginRes = await http.post(
@@ -26,11 +30,15 @@ void main() async {
     body: jsonEncode({'username': username, 'password': password}),
   );
 
+
   print("Insert done");
+
 
   var loginData = jsonDecode(loginRes.body);
 
+
   int userId = loginData['user_id'];
+
 
   // ===== MENU =====
   while (true) {
@@ -43,6 +51,7 @@ void main() async {
       "\n5. Delete an Expenses"
       "\n6. Exit",
     );
+
 
     stdout.write("Choose... ");
     String? choice = stdin.readLineSync()?.trim();
@@ -59,27 +68,34 @@ void main() async {
         Uri.parse('http://localhost:3000/expenses?user_id=$userId'),
       );
 
+
       List<dynamic> data = jsonDecode(res.body);
+
 
       print("===All Expenses===");
       for (int i = 0; i < data.length; i++) {
         var row = data[i];
         var d = DateTime.parse(row['date']).toLocal();
 
+
         String formattedDate =
             "${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')} "
             "${d.hour.toString().padLeft(2, '0')}:${d.minute.toString().padLeft(2, '0')}:${d.second.toString().padLeft(2, '0')}";
 
+
         print("${i + 1}. ${row["item"]} : ${row["paid"]}฿ : $formattedDate");
       }
+
 
       num total = 0;
       for (var item in data) {
         total += item['paid'];
       }
       print("Total: $total ฿");
-    }
+    } 
+    
     //===Choice 2===
+
     else if (choice == "2") {
       var res = await http.get(
         Uri.parse('http://localhost:3000/expenses/today/$userId'),
@@ -88,11 +104,12 @@ void main() async {
       print("===Today's Expenses===");
       for (int i = 0; i < data.length; i++) {
         var row = data[i];
-
+       
         var d = DateTime.parse(row['date']).toLocal();
         String formattedDate =
             "${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')} "
             "${d.hour.toString().padLeft(2, '0')}:${d.minute.toString().padLeft(2, '0')}:${d.second.toString().padLeft(2, '0')}";
+
 
         print("${i + 1}. ${row["item"]} : ${row["paid"]}฿ : $formattedDate");
       }
@@ -101,9 +118,10 @@ void main() async {
         total += item['paid'];
       }
       print("Total: $total ฿");
-    }
+    } 
+    
     ////===Choice 3=== Search Expenses ====
-    else if (choice == "3") {
+  else if (choice == "3") {
       stdout.write('\nEnter search term: ');
       String? search = stdin.readLineSync();
       if (search == null || search.isEmpty) {
@@ -134,8 +152,57 @@ void main() async {
         print('');
       }
     }
-    //===Choice 4=== Add new Expenses ====
+   
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+
+
+   //===Choice 4=== Add new Expenses ====
+
+    
+
+
+
+
+
+  
+
+
+
+
+
+  
     //===Choice 5=== Delete an Expenses ====
+    
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
     //===Choice 6===
     else if (choice == "6") {
       print("Good Bye");
