@@ -129,23 +129,20 @@ app.get('/expenses/today/:user_id', (req, res) => {
 
 
 
-//DELETE EXPENSES
-app.delete
+app.delete('/expense/:id', (req, res) => {
+    const expenseid = req.params.id;
 
+    const sql = "DELETE FROM expense WHERE id = ?";
+    con.query(sql, [expenseid], (err, result) => {
+        if (err) return res.status(500).json({ error: 'Error deleting expense' });
 
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'Expense not found' });
+        }
 
-
-
-
-
-
-
-
-
-
-
-
-
+        res.json({ message: 'Expense deleted successfully' });
+    });
+});
 
 
 
