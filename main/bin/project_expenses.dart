@@ -122,28 +122,22 @@ void main() async {
         continue;
       }
 
-      var res = await http.get(
-        Uri.parse('http://localhost:3000/expenses?user_id=$userId'),
-      );
-      List<dynamic> data = jsonDecode(res.body);
+      var res = await http.post(
+     Uri.parse('http://localhost:3000/expenses/search?user_id=$userId&keyword=$search'),
+   );
+          List<dynamic> results = jsonDecode(res.body);
 
-      String searchLower = search.toLowerCase();
+     if (results.isEmpty) {
+      print('No matching expenses found.\n');
+    } else {
+  print('Search Results:');
+  for (var e in results) {
+    print('${e['item']}: ${e['paid']} ฿');
+  }
+  print('');
+}
 
-      var results = data
-          .where(
-            (e) => e['item'].toString().toLowerCase().contains(searchLower),
-          )
-          .toList();
-
-      if (results.isEmpty) {
-        print('No matching expenses found.\n');
-      } else {
-        print('Search Results:');
-        for (var e in results) {
-          print('${e['item']}: ${e['paid']} ฿');
-        }
-        print('');
-      }
+      
     }
    
 
