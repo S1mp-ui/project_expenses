@@ -114,7 +114,11 @@ void main() async {
     } 
     
     ////===Choice 3=== Search Expenses ====
+<<<<<<< HEAD
     else if (choice == "3") {
+=======
+   else if (choice == "3") {
+>>>>>>> search_expenses
       stdout.write('\nEnter search term: ');
       String? search = stdin.readLineSync();
       if (search == null || search.isEmpty) {
@@ -122,6 +126,7 @@ void main() async {
         continue;
       }
 
+<<<<<<< HEAD
       var res = await http.get(
         Uri.parse('http://localhost:3000/expenses?user_id=$userId'),
       );
@@ -144,6 +149,24 @@ void main() async {
         }
         print('');
       }
+=======
+      var res = await http.post(
+     Uri.parse('http://localhost:3000/expenses/search?user_id=$userId&keyword=$search'),
+   );
+          List<dynamic> results = jsonDecode(res.body);
+
+     if (results.isEmpty) {
+      print('No matching expenses found.\n');
+    } else {
+  print('Search Results:');
+  for (var e in results) {
+    print('${e['item']}: ${e['paid']} ฿');
+  }
+  print('');
+}
+
+      
+>>>>>>> search_expenses
     }
    
 

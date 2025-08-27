@@ -85,7 +85,28 @@ app.get('/expenses/today/:user_id', (req, res) => {
 
  
 //Search expenses 
-app.get
+app.post('/expenses/search', (req, res) => {
+    const userId = req.body.user_id;
+    const keyword = req.body.keyword;
+
+    console.log('POST body:', req.body);
+
+    if (!userId || !keyword) {
+        return res.status(400).json({ error: 'user_id and keyword are required' });
+    }
+
+    const sql = "SELECT * FROM expense WHERE user_id=? AND item LIKE ?";
+    const searchTerm = `%${keyword}%`;
+
+    con.query(sql, [userId, searchTerm], (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Error searching expenses');
+        }
+        res.json(result);
+    });
+});
+
 
 
 
