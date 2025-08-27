@@ -156,21 +156,27 @@ void main() async {
 
 
   
-    //===Choice 5=== Delete an Expenses ====
-    else if(){
-      
+     //===Choice 5=== Delete an Expense ====
+    else if (choice == "5") {
+      print("===== Delete an Expense =====");
+      stdout.write("Enter the expense ID to delete: ");
+      String? expenseId = stdin.readLineSync()?.trim();
+
+      if (expenseId == null || expenseId.isEmpty) {
+        print("Please enter a valid expense ID.");
+        continue;
+      }
+
+      var deleteRes = await http.delete(
+        Uri.parse('http://localhost:3000/expenses/$expenseId?user_id=$userId'),
+      );
+
+      if (deleteRes.statusCode == 200) {
+        print("Expense deleted successfully.");
+      } else {
+        print("Failed to delete expense: ${deleteRes.body}");
+      }
     }
-
-
-
-
-
-
-
-
- 
-
-
 
 
 
