@@ -84,6 +84,7 @@ app.get('/expenses/today/:user_id', (req, res) => {
 });
 
  
+
 //Search expenses 
 app.post('/expenses/search', (req, res) => {
     const userId = req.body.user_id;
