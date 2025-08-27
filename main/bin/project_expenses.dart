@@ -121,7 +121,48 @@ void main() async {
     } 
     
     ////===Choice 3=== Search Expenses ====
-    
+     else if (choice == "3") {
+      stdout.write('\nEnter search term: ');
+      String? search = stdin.readLineSync();
+      if (search == null || search.isEmpty) {
+        print('Invalid input.\n');
+        continue;
+      }
+
+      // ส่งเป็น POST JSON ตามที่ server ต้องการ
+      var res = await http.post(
+        Uri.parse('http://localhost:3000/expenses/search'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'user_id': userId, 'keyword': search}),
+      );
+
+      // ดู body ที่ได้มา ก่อนแปลง
+      var decoded = jsonDecode(res.body);
+      if (decoded is List) {
+        var searchLower = search.toLowerCase();
+        var results =
+            decoded
+                .where(
+                  (e) =>
+                      e['item'].toString().toLowerCase().contains(searchLower),
+                )
+                .toList();
+        if (results.isEmpty) {
+          print('No matching expenses found.\n');
+        } else {
+          print('Search Results:');
+          for (var e in results) {
+            print('${e['item']}: ${e['paid']} ฿');
+          }
+          print('');
+        }
+      } else if (decoded is Map && decoded.containsKey('error')) {
+        print('Error: ${decoded['error']}');
+        print('Server returned: ${res.body}');
+      } else {
+        print('Unexpected response: ${res.body}');
+      }
+    }
    
 
     
