@@ -102,10 +102,7 @@ void main() async {
       print("Total: $total ฿");
     }
     ////===Choice 3=== Search Expenses ====
-
-  
     else if (choice == "3") {
-
       stdout.write('\nEnter search term: ');
       String? search = stdin.readLineSync();
       if (search == null || search.isEmpty) {
@@ -113,28 +110,12 @@ void main() async {
         continue;
       }
 
-
-
-      var res = await http.get(
-        Uri.parse('http://localhost:3000/expenses?user_id=$userId'),
-      );
-      List<dynamic> data = jsonDecode(res.body);
-
-      String searchLower = search.toLowerCase();
-
-      var results = data
-          .where(
-            (e) => e['item'].toString().toLowerCase().contains(searchLower),
-          )
-          .toList();
-
       // ส่งเป็น POST JSON ตามที่ server ต้องการ
       var res = await http.post(
         Uri.parse('http://localhost:3000/expenses/search'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'user_id': userId, 'keyword': search}),
       );
-
 
       // ดู body ที่ได้มา ก่อนแปลง
       var decoded = jsonDecode(res.body);
@@ -162,17 +143,7 @@ void main() async {
       } else {
         print('Unexpected response: ${res.body}');
       }
-
-     
-
-      
-
     }
-
-
-
-
-
     //===Choice 4=== Add new Expenses ====
     else if (choice == "4") {
       stdout.write('Item name: ');
