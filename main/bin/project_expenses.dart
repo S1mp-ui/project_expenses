@@ -242,7 +242,7 @@ void main() async {
       }
 
       var deleteRes = await http.delete(
-        Uri.parse('http://localhost:3000/expenses/$expenseId?user_id=$userId'),
+        Uri.parse('http://localhost:3000/expense/$expenseId'),
       );
 
       if (deleteRes.statusCode == 200) {

@@ -128,7 +128,8 @@ app.post('/expenses/search', (req, res) => {
 
 
 //ADD EXPENSES
-
+<<<<<<< HEAD
+=======
 app.post('/expenses', (req, res) => {
   const { user_id, item, paid, date } = req.body;
 
@@ -159,7 +160,7 @@ app.post('/expenses', (req, res) => {
     });
   });
 });
-
+>>>>>>> main
 
 
 
