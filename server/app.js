@@ -127,7 +127,36 @@ app.post('/expenses/search', (req, res) => {
 
 
 //ADD EXPENSES
-app.post
+app.post('/expenses', (req, res) => {
+  const { user_id, item, paid, date } = req.body;
+
+  // validate
+  if (!user_id || !item || paid == null) {
+    return res.status(400).json({ error: 'Missing fields: user_id, item, paid' });
+  }
+
+  // helper: แปลง ISO → "YYYY-MM-DD HH:MM:SS"
+  const toMysqlDateTime = (d) =>
+    new Date(d).toISOString().slice(0,19).replace('T',' ');
+
+  const usedDate = date ? toMysqlDateTime(date) : toMysqlDateTime(Date.now());
+
+  const sql = 'INSERT INTO expense (user_id, item, paid, date) VALUES (?,?,?,?)';
+  con.query(sql, [user_id, item, paid, usedDate], (err, result) => {
+    if (err) {
+      console.error('❌ Insert error:', err);
+      return res.status(500).json({ error: 'insert failed' });
+    }
+    // ส่งกลับ JSON
+    res.status(201).json({
+      id: result.insertId,
+      user_id,
+      item,
+      paid,
+      date: usedDate
+    });
+  });
+});
 
 
 
