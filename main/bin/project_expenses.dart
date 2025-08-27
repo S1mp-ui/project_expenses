@@ -114,6 +114,7 @@ void main() async {
       }
 
 
+
       var res = await http.get(
         Uri.parse('http://localhost:3000/expenses?user_id=$userId'),
       );
@@ -127,14 +128,39 @@ void main() async {
           )
           .toList();
 
-      if (results.isEmpty) {
-        print('No matching expenses found.\n');
-      } else {
-        print('Search Results:');
-        for (var e in results) {
-          print('${e['item']}: ${e['paid']} ฿');
+      // ส่งเป็น POST JSON ตามที่ server ต้องการ
+      var res = await http.post(
+        Uri.parse('http://localhost:3000/expenses/search'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'user_id': userId, 'keyword': search}),
+      );
+
+
+      // ดู body ที่ได้มา ก่อนแปลง
+      var decoded = jsonDecode(res.body);
+      if (decoded is List) {
+        var searchLower = search.toLowerCase();
+        var results =
+            decoded
+                .where(
+                  (e) =>
+                      e['item'].toString().toLowerCase().contains(searchLower),
+                )
+                .toList();
+        if (results.isEmpty) {
+          print('No matching expenses found.\n');
+        } else {
+          print('Search Results:');
+          for (var e in results) {
+            print('${e['item']}: ${e['paid']} ฿');
+          }
+          print('');
         }
-        print('');
+      } else if (decoded is Map && decoded.containsKey('error')) {
+        print('Error: ${decoded['error']}');
+        print('Server returned: ${res.body}');
+      } else {
+        print('Unexpected response: ${res.body}');
       }
 
      
@@ -146,7 +172,7 @@ void main() async {
 
 
 
-    
+
     //===Choice 4=== Add new Expenses ====
     else if (choice == "4") {
       stdout.write('Item name: ');
