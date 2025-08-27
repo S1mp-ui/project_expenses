@@ -65,7 +65,7 @@ void main() async {
     if (choice == "1") {
       // ===== GET ALL EXPENSES =====
       var res = await http.get(
-        Uri.parse('http://localhost:3000/expenses?user_id=$userId'),
+        Uri.parse('http://localhost:3000/expenses/$userId'),
       );
 
 
