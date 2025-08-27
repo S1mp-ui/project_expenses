@@ -63,19 +63,19 @@ app.get('/password/:raw', (req, res) => {
 //----get all expenses-----
 app.get('/expenses/:user_id', (req, res) => {
     const userId = req.params.user_id;
-    const sql ="SELECT * FROM expenses WHERE user_id=?";
+    const sql ="SELECT * FROM expense WHERE user_id=?";
     con.query(sql,[userId],(err,result) => {
-        if(err) return res.status(500).send('Error retrieving expenses');
+        if(err) return res.status(500).send('Error retrieve expenses');
         res.json(result);  
     });
-});;    
+});    
 
 
 //get today expenses
 app.get('/expenses/today/:user_id', (req, res) => {
     const userId = req.params.user_id;
     const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
-    const sql = "SELECT * FROM expenses WHERE user_id=? AND DATE(date) = ?";
+    const sql= "SELECT * FROM expense WHERE user_id=? AND DATE(`date`) = ?";
     
     con.query(sql, [userId, today], (err, result) => {
         if(err) return res.status(500).send('Error retrieving today\'s expenses');
@@ -84,7 +84,29 @@ app.get('/expenses/today/:user_id', (req, res) => {
 });
 
  
+
 //Search expenses 
+app.post('/expenses/search', (req, res) => {
+    const userId = req.body.user_id;
+    const keyword = req.body.keyword;
+
+    console.log('POST body:', req.body);
+
+    if (!userId || !keyword) {
+        return res.status(400).json({ error: 'user_id and keyword are required' });
+    }
+
+    const sql = "SELECT * FROM expense WHERE user_id=? AND item LIKE ?";
+    const searchTerm = `%${keyword}%`;
+
+    con.query(sql, [userId, searchTerm], (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Error searching expenses');
+        }
+        res.json(result);
+    });
+});
 
 
 
@@ -106,6 +128,39 @@ app.get('/expenses/today/:user_id', (req, res) => {
 
 
 //ADD EXPENSES
+<<<<<<< HEAD
+=======
+app.post('/expenses', (req, res) => {
+  const { user_id, item, paid, date } = req.body;
+
+  // validate
+  if (!user_id || !item || paid == null) {
+    return res.status(400).json({ error: 'Missing fields: user_id, item, paid' });
+  }
+
+  // helper: แปลง ISO → "YYYY-MM-DD HH:MM:SS"
+  const toMysqlDateTime = (d) =>
+    new Date(d).toISOString().slice(0,19).replace('T',' ');
+
+  const usedDate = date ? toMysqlDateTime(date) : toMysqlDateTime(Date.now());
+
+  const sql = 'INSERT INTO expense (user_id, item, paid, date) VALUES (?,?,?,?)';
+  con.query(sql, [user_id, item, paid, usedDate], (err, result) => {
+    if (err) {
+      console.error('❌ Insert error:', err);
+      return res.status(500).json({ error: 'insert failed' });
+    }
+    // ส่งกลับ JSON
+    res.status(201).json({
+      id: result.insertId,
+      user_id,
+      item,
+      paid,
+      date: usedDate
+    });
+  });
+});
+>>>>>>> main
 
 
 
